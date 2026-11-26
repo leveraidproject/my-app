@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { seedSongs } from "./songs";
 
@@ -44,8 +45,8 @@ async function sha(t: string) {
 }
 
 const inp =
-  "w-full rounded-md border border-[#c9cde4] bg-white px-3 py-2 text-[15px] text-[#1c2140] outline-none focus:border-[#3d41c9] focus:ring-2 focus:ring-[#3d41c9]/25";
-const btn = "rounded-md border border-[#c9cde4] px-3 py-1.5 text-sm font-medium hover:bg-[#eef0f8]";
+  "[color-scheme:dark] w-full rounded-md border border-[#2e2e2e] bg-[#161616] px-3 py-2 text-[15px] text-[#f2f2f2] outline-none focus:border-[#e11d1d] focus:ring-2 focus:ring-[#e11d1d]/25";
+const btn = "rounded-md border border-[#2e2e2e] px-3 py-1.5 text-sm font-medium hover:bg-[#262626]";
 
 function PeopleInput({
   label, value, onChange, options,
@@ -63,9 +64,9 @@ function PeopleInput({
   return (
     <div className="relative text-sm font-medium">
       {label}
-      <div className="mt-1 flex flex-wrap gap-1 rounded-md border border-[#c9cde4] bg-white p-1.5 focus-within:border-[#3d41c9] focus-within:ring-2 focus-within:ring-[#3d41c9]/25">
+      <div className="mt-1 flex flex-wrap gap-1 rounded-md border border-[#2e2e2e] bg-[#161616] p-1.5 focus-within:border-[#e11d1d] focus-within:ring-2 focus-within:ring-[#e11d1d]/25">
         {value.map((v) => (
-          <span key={v} className="flex items-center gap-1 rounded bg-[#e1e3f7] px-2 py-0.5">
+          <span key={v} className="flex items-center gap-1 rounded bg-[#2a2a2a] px-2 py-0.5">
             {v}
             <button type="button" aria-label={`Remove ${v}`} onClick={() => onChange(value.filter((x) => x !== v))}>
               &times;
@@ -88,17 +89,17 @@ function PeopleInput({
         />
       </div>
       {open && (matches.length > 0 || canAdd) && (
-        <ul className="absolute z-20 mt-1 w-full overflow-hidden rounded-md border border-[#c9cde4] bg-white shadow-lg">
+        <ul className="absolute z-20 mt-1 w-full overflow-hidden rounded-md border border-[#2e2e2e] bg-[#161616] shadow-lg">
           {matches.map((m) => (
             <li key={m}>
-              <button type="button" onMouseDown={() => add(m)} className="block w-full px-3 py-2 text-left font-normal hover:bg-[#eef0f8]">
+              <button type="button" onMouseDown={() => add(m)} className="block w-full px-3 py-2 text-left font-normal hover:bg-[#262626]">
                 {m}
               </button>
             </li>
           ))}
           {canAdd && (
             <li>
-              <button type="button" onMouseDown={() => add(text)} className="block w-full px-3 py-2 text-left font-semibold text-[#3d41c9] hover:bg-[#eef0f8]">
+              <button type="button" onMouseDown={() => add(text)} className="block w-full px-3 py-2 text-left font-semibold text-[#ff5a5a] hover:bg-[#262626]">
                 Add new: {text.trim()}
               </button>
             </li>
@@ -265,28 +266,35 @@ export default function MusicLibrary() {
   }
 
   return (
-    <div className="min-h-screen bg-[#eef0f8] text-[#1c2140]">
+    <div className="min-h-screen bg-[#0a0a0a] text-[#f2f2f2]">
       <datalist id="dl-artists">{opts.artists.map((o) => <option key={o} value={o} />)}</datalist>
       <datalist id="dl-events">{opts.events.map((o) => <option key={o} value={o} />)}</datalist>
       <datalist id="dl-titles">{opts.titles.map((o) => <option key={o} value={o} />)}</datalist>
       <datalist id="dl-people">{opts.people.map((o) => <option key={o} value={o} />)}</datalist>
 
-      <header className="bg-[#1c2140] px-5 pb-8 pt-10 text-white sm:px-10">
+      <header className="border-b-2 border-[#e11d1d] bg-black px-5 pb-8 pt-8 sm:px-10">
         <div className="mx-auto max-w-5xl">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Music Library</h1>
-          <p className="mt-2 max-w-xl text-[#b9bee3]">Every song we have sung, with who led it and where to find it.</p>
+          <div className="flex items-center gap-4 sm:gap-6">
+            <Image src="/logo.png" alt="HLC Music Library logo" width={112} height={112} priority className="h-20 w-20 shrink-0 sm:h-28 sm:w-28" />
+            <div>
+              <h1 className="text-3xl font-extrabold italic tracking-tight sm:text-5xl">
+                <span className="text-white">HLC</span> <span className="text-[#e11d1d]">Music Library</span>
+              </h1>
+              <p className="mt-1 text-[#a3a3a3]">Every song we have sung, with who led it and where to find it.</p>
+            </div>
+          </div>
           <input
             type="search" value={query} aria-label="Search the library"
             onChange={(e) => { setQuery(e.target.value); setLimit(100); }}
             placeholder="Search song, singer or band, song lead, backup, event or date"
-            className="mt-6 w-full rounded-md bg-white px-4 py-3 text-[16px] text-[#1c2140] outline-none focus:ring-2 focus:ring-[#8f93f0]"
+            className="mt-6 w-full rounded-md border border-[#2e2e2e] bg-[#161616] px-4 py-3 text-[16px] text-[#f2f2f2] outline-none placeholder:text-[#777] focus:border-[#e11d1d] focus:ring-2 focus:ring-[#e11d1d]/40"
           />
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <label className="flex items-center gap-2 text-sm text-[#b9bee3]">
+            <label className="flex items-center gap-2 text-sm text-[#a3a3a3]">
               Sort by
               <select
                 value={sortKey} onChange={(e) => setSortKey(e.target.value as SortKey)}
-                className="rounded-md bg-white px-2 py-2 text-[#1c2140]"
+                className="rounded-md border border-[#2e2e2e] bg-[#161616] px-2 py-2 text-white [color-scheme:dark]"
               >
                 {Object.entries(SORTS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
               </select>
@@ -294,20 +302,20 @@ export default function MusicLibrary() {
             <button onClick={() => setDesc(!desc)} className="rounded-md bg-white/15 px-3 py-2 text-sm hover:bg-white/25">
               {sortKey === "date" ? (desc ? "Newest first" : "Oldest first") : desc ? "Z to A" : "A to Z"}
             </button>
-            <label className="flex items-center gap-2 text-sm text-[#b9bee3]">
+            <label className="flex items-center gap-2 text-sm text-[#a3a3a3]">
               Date
               <input
                 type="date" value={day} aria-label="Show a specific date"
                 onChange={(e) => { setDay(e.target.value); setMonth(""); setLimit(100); }}
-                className="rounded-md bg-white px-2 py-1.5 text-[#1c2140]"
+                className="rounded-md border border-[#2e2e2e] bg-[#161616] px-2 py-1.5 text-white [color-scheme:dark]"
               />
             </label>
-            <label className="flex items-center gap-2 text-sm text-[#b9bee3]">
+            <label className="flex items-center gap-2 text-sm text-[#a3a3a3]">
               Month
               <input
                 type="month" value={month} aria-label="Show a whole month"
                 onChange={(e) => { setMonth(e.target.value); setDay(""); setLimit(100); }}
-                className="rounded-md bg-white px-2 py-1.5 text-[#1c2140]"
+                className="rounded-md border border-[#2e2e2e] bg-[#161616] px-2 py-1.5 text-white [color-scheme:dark]"
               />
             </label>
             {(day || month) && (
@@ -319,7 +327,7 @@ export default function MusicLibrary() {
             <button onClick={() => setShowDl(!showDl)} className="rounded-md bg-white/15 px-4 py-2 text-sm font-semibold hover:bg-white/25">
               Download
             </button>
-            <button onClick={openAdd} className="rounded-md bg-[#f2b84b] px-5 py-2 font-semibold text-[#1c2140] hover:bg-[#f7c765]">
+            <button onClick={openAdd} className="rounded-md bg-[#e11d1d] px-5 py-2 font-semibold text-white hover:bg-[#ff2d2d]">
               Add songs
             </button>
           </div>
@@ -328,9 +336,9 @@ export default function MusicLibrary() {
 
       <main className="mx-auto max-w-5xl px-5 py-8 sm:px-10">
         {showDl && (
-          <section className="mb-8 rounded-lg border border-[#c9cde4] bg-[#f8f9fd] p-5">
+          <section className="mb-8 rounded-lg border border-[#2e2e2e] bg-[#121212] p-5">
             <h2 className="mb-1 text-xl font-semibold">Download as a spreadsheet</h2>
-            <p className="mb-4 text-sm text-[#5a6089]">Leave a box empty to include everything. Opens in Excel.</p>
+            <p className="mb-4 text-sm text-[#a3a3a3]">Leave a box empty to include everything. Opens in Excel.</p>
             <div className="grid gap-4 sm:grid-cols-3">
               <label className="text-sm font-medium">From date<input type="date" className={`${inp} mt-1`} value={dl.from} onChange={(e) => setDl({ ...dl, from: e.target.value })} /></label>
               <label className="text-sm font-medium">To date<input type="date" className={`${inp} mt-1`} value={dl.to} onChange={(e) => setDl({ ...dl, to: e.target.value })} /></label>
@@ -339,7 +347,7 @@ export default function MusicLibrary() {
               <label className="text-sm font-medium">Backup<input list="dl-people" className={`${inp} mt-1`} value={dl.backup} onChange={(e) => setDl({ ...dl, backup: e.target.value })} /></label>
             </div>
             <div className="mt-5 flex items-center gap-4">
-              <button onClick={downloadCsv} disabled={!forDownload.length} className="rounded-md bg-[#3d41c9] px-5 py-2 font-semibold text-white hover:bg-[#3236b0] disabled:opacity-50">
+              <button onClick={downloadCsv} disabled={!forDownload.length} className="rounded-md bg-[#e11d1d] px-5 py-2 font-semibold text-white hover:bg-[#b91515] disabled:opacity-50">
                 Download {forDownload.length} {forDownload.length === 1 ? "song" : "songs"}
               </button>
               <button onClick={() => setDl({ from: "", to: "", artist: "", songlead: "", backup: "" })} className={btn}>Clear filters</button>
@@ -348,7 +356,7 @@ export default function MusicLibrary() {
         )}
 
         {showForm && (
-          <form onSubmit={save} className="mb-8 rounded-lg border border-[#c9cde4] bg-[#f8f9fd] p-5">
+          <form onSubmit={save} className="mb-8 rounded-lg border border-[#2e2e2e] bg-[#121212] p-5">
             <h2 className="mb-4 text-xl font-semibold">{editingId ? "Edit song" : "Add songs for a date"}</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="text-sm font-medium">Date sung or posted<input type="date" className={`${inp} mt-1`} value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} /></label>
@@ -359,7 +367,7 @@ export default function MusicLibrary() {
 
             <div className="mt-6 space-y-4">
               {form.lines.map((l, i) => (
-                <div key={i} className="rounded-md border border-[#d4d7ea] bg-white p-4">
+                <div key={i} className="rounded-md border border-[#262626] bg-[#161616] p-4">
                   <div className="grid gap-3 sm:grid-cols-2">
                     <label className="text-sm font-medium">Song {form.lines.length > 1 ? i + 1 : ""}<input required={i === 0} list="dl-titles" className={`${inp} mt-1`} value={l.title} onChange={(e) => setLine(i, { title: e.target.value })} /></label>
                     <label className="text-sm font-medium">Singer or band<input list="dl-artists" className={`${inp} mt-1`} value={l.artist} onChange={(e) => setLine(i, { artist: e.target.value })} /></label>
@@ -374,45 +382,45 @@ export default function MusicLibrary() {
                 </div>
               ))}
               {!editingId && (
-                <button type="button" className={`${btn} bg-white`} onClick={() => setForm({ ...form, lines: [...form.lines, { ...emptyLine }] })}>
+                <button type="button" className={`${btn} bg-[#161616]`} onClick={() => setForm({ ...form, lines: [...form.lines, { ...emptyLine }] })}>
                   Add another song on this date
                 </button>
               )}
             </div>
 
             <div className="mt-5 flex gap-3">
-              <button type="submit" className="rounded-md bg-[#3d41c9] px-5 py-2 font-semibold text-white hover:bg-[#3236b0]">
+              <button type="submit" className="rounded-md bg-[#e11d1d] px-5 py-2 font-semibold text-white hover:bg-[#b91515]">
                 {editingId ? "Save changes" : "Save songs"}
               </button>
-              <button type="button" onClick={closeForm} className={`${btn} bg-white px-5 py-2`}>Cancel</button>
+              <button type="button" onClick={closeForm} className={`${btn} bg-[#161616] px-5 py-2`}>Cancel</button>
             </div>
           </form>
         )}
 
-        <p className="mb-3 text-sm text-[#5a6089]">
+        <p className="mb-3 text-sm text-[#a3a3a3]">
           {entries.length ? (query || day || month ? `${results.length} of ${entries.length} entries match` : `${entries.length} entries`) : ""}
         </p>
 
         {loaded && entries.length === 0 && (
-          <div className="rounded-lg border border-dashed border-[#a9aed4] p-10 text-center">
+          <div className="rounded-lg border border-dashed border-[#444] p-10 text-center">
             <p className="text-lg font-medium">Your library is empty.</p>
-            <button onClick={openAdd} className="mt-4 rounded-md bg-[#3d41c9] px-5 py-2 font-semibold text-white">Add songs</button>
+            <button onClick={openAdd} className="mt-4 rounded-md bg-[#e11d1d] px-5 py-2 font-semibold text-white">Add songs</button>
           </div>
         )}
         {entries.length > 0 && results.length === 0 && (
-          <p className="rounded-lg border border-[#c9cde4] bg-white p-6 text-center">No entries match. Try a different word, date or month.</p>
+          <p className="rounded-lg border border-[#2e2e2e] bg-[#161616] p-6 text-center">No entries match. Try a different word, date or month.</p>
         )}
 
-        <ul className="divide-y divide-[#d4d7ea] overflow-hidden rounded-lg border border-[#c9cde4] bg-white">
+        <ul className="divide-y divide-[#262626] overflow-hidden rounded-lg border border-[#2e2e2e] bg-[#161616]">
           {results.slice(0, limit).map((e) => (
-            <li key={e.id} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <li key={e.id} className="flex flex-col gap-3 p-4 hover:bg-[#1a1a1a] sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 <p className="truncate text-lg font-semibold">{e.title}</p>
-                <p className="truncate text-[#5a6089]">
+                <p className="truncate text-[#a3a3a3]">
                   {[e.artist, fmt(e.date), e.event].filter(Boolean).join("  |  ")}
                 </p>
                 {(e.songlead.length > 0 || e.backup.length > 0) && (
-                  <p className="truncate text-sm text-[#5a6089]">
+                  <p className="truncate text-sm text-[#a3a3a3]">
                     {e.songlead.length > 0 && <>Lead: {e.songlead.join(", ")}</>}
                     {e.songlead.length > 0 && e.backup.length > 0 && "  |  "}
                     {e.backup.length > 0 && <>Backup: {e.backup.join(", ")}</>}
@@ -420,30 +428,30 @@ export default function MusicLibrary() {
                 )}
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                {e.youtube && <a href={e.youtube} target="_blank" rel="noopener noreferrer" className="rounded-md bg-[#d8322f] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#bd2624]">YouTube</a>}
+                {e.youtube && <a href={e.youtube} target="_blank" rel="noopener noreferrer" className="rounded-md border border-[#e11d1d] px-3 py-1.5 text-sm font-semibold text-[#ff5a5a] hover:bg-[#e11d1d] hover:text-white">YouTube</a>}
                 {e.onedrive && (
-                  <a href={e.onedrive} target="_blank" rel="noopener noreferrer" className="rounded-md bg-[#1a6fd1] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#1559a8]">
+                  <a href={e.onedrive} target="_blank" rel="noopener noreferrer" className="rounded-md border border-[#555] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#333]">
                     {e.onedrive.includes("google") ? "Drive" : "OneDrive"}
                   </a>
                 )}
                 <button onClick={() => openEdit(e)} className={btn}>Edit</button>
-                <button onClick={() => setDel(e)} className={`${btn} text-[#a32422] hover:bg-[#fbeaea]`}>Delete</button>
+                <button onClick={() => setDel(e)} className={`${btn} text-[#ff6b6b] hover:bg-[#2a1212]`}>Delete</button>
               </div>
             </li>
           ))}
         </ul>
         {results.length > limit && (
-          <button onClick={() => setLimit(limit + 100)} className={`${btn} mt-4 w-full bg-white py-2`}>
+          <button onClick={() => setLimit(limit + 100)} className={`${btn} mt-4 w-full bg-[#161616] py-2`}>
             Show 100 more ({results.length - limit} left)
           </button>
         )}
       </main>
 
       {del && (
-        <div className="fixed inset-0 z-30 flex items-center justify-center bg-[#1c2140]/60 p-4" role="dialog" aria-modal="true">
-          <form onSubmit={confirmDelete} className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
+        <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/75 p-4" role="dialog" aria-modal="true">
+          <form onSubmit={confirmDelete} className="w-full max-w-sm rounded-lg bg-[#161616] p-6 shadow-xl">
             <h2 className="text-xl font-semibold">{hasPin ? "Enter PIN to delete" : "Create a delete PIN"}</h2>
-            <p className="mt-2 text-sm text-[#5a6089]">
+            <p className="mt-2 text-sm text-[#a3a3a3]">
               {hasPin
                 ? `This will delete "${del.title}" on ${fmt(del.date)}.`
                 : "Deleting is protected by a PIN. Choose one now and keep it safe."}
@@ -452,9 +460,9 @@ export default function MusicLibrary() {
               type="password" autoFocus value={pin} onChange={(e) => setPin(e.target.value)}
               aria-label="PIN" className={`${inp} mt-4`} autoComplete="off"
             />
-            {pinMsg && <p className="mt-2 text-sm font-medium text-[#a32422]">{pinMsg}</p>}
+            {pinMsg && <p className="mt-2 text-sm font-medium text-[#ff6b6b]">{pinMsg}</p>}
             <div className="mt-5 flex gap-3">
-              <button type="submit" className="rounded-md bg-[#a32422] px-4 py-2 font-semibold text-white hover:bg-[#861c1a]">
+              <button type="submit" className="rounded-md bg-[#c01818] px-4 py-2 font-semibold text-white hover:bg-[#e11d1d]">
                 {hasPin ? "Delete song" : "Save PIN"}
               </button>
               <button type="button" onClick={closeDel} className={`${btn} px-4 py-2`}>Cancel</button>
