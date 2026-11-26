@@ -116,6 +116,8 @@ export default function MusicLibrary() {
   const [sortKey, setSortKey] = useState<SortKey>("date");
   const [desc, setDesc] = useState(true);
   const [limit, setLimit] = useState(100);
+  const [day, setDay] = useState("");
+  const [month, setMonth] = useState("");
   const [form, setForm] = useState<FormState>(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -166,13 +168,14 @@ export default function MusicLibrary() {
           [e.title, e.artist, e.event, e.date, e.songlead.join(" "), e.backup.join(" ")].some((v) => v.toLowerCase().includes(q))
         )
       : entries;
-    return [...list].sort((a, b) => {
+    const dated = list.filter((e) => (!day || e.date === day) && (!month || e.date.startsWith(month)));
+    return [...dated].sort((a, b) => {
       const x = sortVal(a, sortKey), y = sortVal(b, sortKey);
       if (!x && y) return 1;
       if (x && !y) return -1;
       return (desc ? -1 : 1) * x.localeCompare(y, undefined, { sensitivity: "base" });
     });
-  }, [entries, query, sortKey, desc]);
+  }, [entries, query, sortKey, desc, day, month]);
 
   const forDownload = useMemo(
     () =>
@@ -291,6 +294,27 @@ export default function MusicLibrary() {
             <button onClick={() => setDesc(!desc)} className="rounded-md bg-white/15 px-3 py-2 text-sm hover:bg-white/25">
               {sortKey === "date" ? (desc ? "Newest first" : "Oldest first") : desc ? "Z to A" : "A to Z"}
             </button>
+            <label className="flex items-center gap-2 text-sm text-[#b9bee3]">
+              Date
+              <input
+                type="date" value={day} aria-label="Show a specific date"
+                onChange={(e) => { setDay(e.target.value); setMonth(""); setLimit(100); }}
+                className="rounded-md bg-white px-2 py-1.5 text-[#1c2140]"
+              />
+            </label>
+            <label className="flex items-center gap-2 text-sm text-[#b9bee3]">
+              Month
+              <input
+                type="month" value={month} aria-label="Show a whole month"
+                onChange={(e) => { setMonth(e.target.value); setDay(""); setLimit(100); }}
+                className="rounded-md bg-white px-2 py-1.5 text-[#1c2140]"
+              />
+            </label>
+            {(day || month) && (
+              <button onClick={() => { setDay(""); setMonth(""); }} className="rounded-md bg-white/15 px-3 py-2 text-sm hover:bg-white/25">
+                Clear date
+              </button>
+            )}
             <span className="flex-1" />
             <button onClick={() => setShowDl(!showDl)} className="rounded-md bg-white/15 px-4 py-2 text-sm font-semibold hover:bg-white/25">
               Download
@@ -366,7 +390,7 @@ export default function MusicLibrary() {
         )}
 
         <p className="mb-3 text-sm text-[#5a6089]">
-          {entries.length ? (query ? `${results.length} of ${entries.length} entries match` : `${entries.length} entries`) : ""}
+          {entries.length ? (query || day || month ? `${results.length} of ${entries.length} entries match` : `${entries.length} entries`) : ""}
         </p>
 
         {loaded && entries.length === 0 && (
@@ -376,7 +400,7 @@ export default function MusicLibrary() {
           </div>
         )}
         {entries.length > 0 && results.length === 0 && (
-          <p className="rounded-lg border border-[#c9cde4] bg-white p-6 text-center">No entries match &ldquo;{query}&rdquo;. Try a different word.</p>
+          <p className="rounded-lg border border-[#c9cde4] bg-white p-6 text-center">No entries match. Try a different word, date or month.</p>
         )}
 
         <ul className="divide-y divide-[#d4d7ea] overflow-hidden rounded-lg border border-[#c9cde4] bg-white">
